@@ -1,6 +1,7 @@
+import os
 import random
-import keyboard
-from colorama import Fore, Style
+import msvcrt
+from colors import bcolors
 
 # Symbols
 symbols = {
@@ -82,12 +83,12 @@ def print_instructions():
     print("Choose your action:")
     for key, value in symbols.items():
         print(f"{key} for {value}")
-    print("Type 'q' to exit the game.")
+    print("Press 'q' to exit the game.")
 
 # Player choice
 def get_player_choice():
     while True:
-        choice = input("Enter your choice (r, p, s): ").lower()
+        choice = msvcrt.getwch() 
         if choice in symbols:
             return choice
         elif choice == 'q':
@@ -107,7 +108,7 @@ def play_game():
     computer_choice = get_computer_choice()
     result = rules[player_choice][computer_choice]
     games_played += 1
-
+    os.system('cls')
     
     print("You chose:")
     print(hand_images[player_choice])
@@ -119,16 +120,16 @@ def play_game():
         player_score += 1
         consecutive_wins += 1
         consecutive_losses = 0
-        print(Fore.GREEN + random.choice(win_phrases) + Style.RESET_ALL)
+        print(bcolors.GREEN + random.choice(win_phrases) + bcolors.DEFAULT)
         if consecutive_wins == 3:
-            print(Fore.YELLOW + random.choice(consecutive_win_phrases) + Style.RESET_ALL)
+            print(bcolors.YELLOW + random.choice(consecutive_win_phrases) + bcolors.DEFAULT)
     elif result == 'loses':
         computer_score += 1
         consecutive_losses += 1
         consecutive_wins = 0
-        print(Fore.RED + random.choice(loss_phrases) + Style.RESET_ALL)
+        print(bcolors.RED + random.choice(loss_phrases) + bcolors.DEFAULT)
         if consecutive_losses == 3:
-            print(Fore.MAGENTA + random.choice(consecutive_loss_phrases) + Style.RESET_ALL)
+            print(bcolors.PURPLE + random.choice(consecutive_loss_phrases) + bcolors.DEFAULT)
     else:
         consecutive_wins = 0
         consecutive_losses = 0
@@ -140,9 +141,7 @@ def play_game():
     print(f"Total games played: {games_played}")
 
 # Game loop
+os.system('cls')
 print_instructions()
 while True:
-    if keyboard.is_pressed('q'):
-        print("Exiting the game.")
-        break
     play_game()
